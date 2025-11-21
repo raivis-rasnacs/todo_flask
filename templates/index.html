@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My ToDo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 <body>
     <div class="container">
@@ -12,14 +14,15 @@
             <div class="col-4">
                 <h2> ☑️ My ToDo ☑️</h2>
                 <form action="/tasks" method="POST">
-                    <input class="form-control" type="text" name="task_name" id="">
-                    <input class="form-control" type="date" name="task_date" id="">
+                    <input required class="form-control" type="text" name="task_name" id="">
+                    <input required class="form-control" type="date" name="task_date" id="">
                     <p>Prioritāte:</p>
                     <select class="form-select" name="task_priority" id="">
                         <option value="3">Svarīgi</option>
                         <option value="2">Ne tik svarīgi</option>
                         <option value="1">Nesvarīgi</option>
                     </select>
+                    <br>
                     <input class="btn btn-primary" type="submit" value="Pievienot! 💾">
                 </form>
                 <hr>
@@ -28,12 +31,24 @@
                         <th>Darbs</th>
                         <th>Prioritāte</th>
                         <th>Termiņš</th>
+                        <th>Darbības</th>
                     </tr>
-                    <tr>
-                        <td>Iztīrīt māju 🧹</td>
-                        <td>Svarīgi</td>
-                        <td>13.12.2030</td>
-                    </tr>
+                    {% for task in data %}
+                        <tr>
+                            <td>{{ task[0] }}</td>
+                            <td>
+                                {% if task[1] == 1 %}
+                                    Nesvarīgi
+                                {% elif task[1] == 2 %}
+                                    Ne tik svarīgi
+                                {% elif task[1] == 3 %}
+                                    Svarīgi
+                                {% endif %}
+                            </td>
+                            <td>{{ task[2] }}</td>
+                            <td><a href="">✏️</a><a href="">✖️</a></td>
+                        </tr>
+                    {% endfor %}
                 </table>
             </div>
         </div>
