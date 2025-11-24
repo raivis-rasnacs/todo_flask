@@ -8,7 +8,7 @@ import sqlite3
 
 app = Flask(__name__)
 
-@app.route("/tasks", methods = ["GET", "POST"])
+@app.route("/tasks", methods = ["GET", "POST", "DELETE"])
 def index():
     if request.method == "POST":
         try:
@@ -31,11 +31,27 @@ def index():
         except Exception as e:
             print(e)
         return redirect("/tasks")
+    # dzēš ierakstu
+    elif request.method == "DELETE":
+        id_to_delete = request.form.get("id_to_delete")
+        print(id_to_delete)
+
+        try:
+            sql = "DELETE FROM tasks WHERE task_id = ?;"
+            con = sqlite3.connect("db/tasks.db")
+            cur = con.cursor()
+            cur.execute(sql, (int(id_to_delete), ))
+            con.commit()
+            con.close()
+        except Exception as e:
+            print(e)
+        return redirect("/tasks")
+
 
     try:
         con = sqlite3.connect("db/tasks.db")
         cur = con.cursor()
-        sql = "SELECT task_name, priority, date FROM tasks;"
+        sql = "SELECT task_id, task_name, priority, date FROM tasks;"
         data = cur.execute(sql)
         data = data.fetchall()
         con.close()
